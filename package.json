@@ -1,0 +1,21 @@
+{
+  "name": "discordstreamer",
+  "version": "0.0.1",
+  "description": "24/7 Music Streaming Discord Bot framework for a server-radio, made for ease of use.",
+  "readme": "",
+  "author": {
+    "name": "Joann Mõndresku",
+    "email": "joann@cernodile.com",
+    "url": "https://www.cernodile.com"
+  },
+  "engines": {
+    "node": "^5.x.x",
+    "npm": ">=3.x.x"
+  },
+  "license": "GPL-3.0",
+  "repository": "https://github.com/TeamCernodile/DiscordStreamer/",
+  "dependencies": {
+    "eris": "abalabahaha/Eris#dev",
+    "ytdl-core": "^0.7.17"
+  }
+}
