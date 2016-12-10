@@ -42,5 +42,5 @@ Masteruser commands
   - reshuffle - Reshuffles the playlist, and starts skips to the first song.
 
 ## Support
-If you're familiar with looking at the code, there's basically all you need to know about this module including documentation. However, if you're lost and need more information, contact us at
+We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer). However, if you're lost and need more information, contact us at
 [![Discord](https://discordapp.com/api/guilds/256444503123034112/widget.png?style=banner2)](https://discord.gg/NQcgJzR)
