@@ -25,9 +25,10 @@ module.exports = class DiscordStreamer extends EventEmitter {
   * @param options Object All definable options will be declared here.
   * @param options.channel String Voice channel ID for the stream.
   * @param options.feed String Text channel ID for the bot's feed.
-  * @param [options.debug] Boolean Declares whether debug mode is enabled or not.
-  * @param [options.prefix] String Prefix for the bot's commands.
-  * @param [options.masterUser] Array An array containing the IDs of command-enabled users.
+  * @param [options.debug=false] Boolean Declares whether debug mode is enabled or not.
+  * @param [options.prefix=->] String Prefix for the bot's commands.
+  * @param [options.masterUser=[]] Array An array containing the IDs of command-enabled users.
+  * @param [options.fm=DiscordStreamer FM] String Your "radio-station" name.
   */
   constructor (token, options) {
     super();
@@ -118,7 +119,7 @@ module.exports = class DiscordStreamer extends EventEmitter {
             case 'info':
               var formatArray = [];
               formatArray.push(':radio: **' + this.options.fm + '** v' + pkg.version);
-              formatArray.push('Powered by DiscordStreamer made by Team Cernodile.');
+              formatArray.push('Powered by DiscordStreamer made by Team Cernodile.\nhttps://www.npmjs.com/package/discordstreamer\nhttps://github.com/TeamCernodile/DiscordStreamer');
               this.bot.createMessage(msg.channel.id, formatArray.join('\n'));
               break;
           }
