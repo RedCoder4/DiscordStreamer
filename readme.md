@@ -34,13 +34,20 @@ DiscordStreamer offers variety of functions to host your server radio perfectly.
 
 User commands
   - queue - Lets the people see upcoming songs.
+    - list/playlist 
   - info - Shows information about the framework.
+    - source/framework 
+  - skip - Skips the currently playing song through a vote.
 
 Masteruser commands
-  - add - Adds a YouTube video to the playlist file. **(NOTE! Must be prefixed with https:// and be on youtube.com, not youtu.be!)**
-  - skip - Skips the currently playing song.
+  - add - Adds a YouTube video to the playlist file.
+    - request/enqueue
+  - skip - Skips the currently playing song forcibly.
+    - next/enqueue
   - reshuffle - Reshuffles the playlist, and starts skips to the first song.
+    - shuffle
 
 ## Support
-If you're familiar with looking at the code, there's basically all you need to know about this module including documentation. However, if you're lost and need more information, contact us at
+We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer) However, if you're lost and need more information, contact us at
+
 [![Discord](https://discordapp.com/api/guilds/256444503123034112/widget.png?style=banner2)](https://discord.gg/NQcgJzR)
