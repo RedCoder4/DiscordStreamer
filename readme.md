@@ -43,4 +43,5 @@ Masteruser commands
 
 ## Support
 We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer). However, if you're lost and need more information, contact us at
+
 [![Discord](https://discordapp.com/api/guilds/256444503123034112/widget.png?style=banner2)](https://discord.gg/NQcgJzR)
