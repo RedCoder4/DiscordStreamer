@@ -7,10 +7,11 @@ function debugMsg (string) {
   return console.log('\u001b[32mDiscordStreamer: \u001b[0m' + string);
 }
 /**
+ * @private
  * @function shuffle
- * @param array Array The array containing the items to shuffle.
+ * @param {Array} The array containing the items to shuffle.
  * @credit Stackoverflow "Community Wiki"
- * @return Array<>
+ * @returns {Array} Shuffled array
  */
 function shuffle(a) {
   for (var i = a.length; i; i--) {
@@ -19,16 +20,17 @@ function shuffle(a) {
   }
 }
 module.exports = class DiscordStreamer extends EventEmitter {
-  /*
+  /**
   * @function constructor
-  * @param token String Your OAuth2 Discord Bot token.
-  * @param options Object All definable options will be declared here.
-  * @param options.channel String Voice channel ID for the stream.
-  * @param options.feed String Text channel ID for the bot's feed.
-  * @param [options.debug=false] Boolean Declares whether debug mode is enabled or not.
-  * @param [options.prefix=->] String Prefix for the bot's commands.
-  * @param [options.masterUser=[]] Array An array containing the IDs of command-enabled users.
-  * @param [options.fm=DiscordStreamer FM] String Your "radio-station" name.
+  * @param {String} token Your OAuth2 Discord Bot token.
+  * @param {Object} options All definable options will be declared here.
+  * @param {String} options.channel Voice channel ID for the stream.
+  * @param {String} options.feed Text channel ID for the bot's feed.
+  * @param {Boolean} [options.debug=false] Declares whether debug mode is enabled or not.
+  * @param {String} [options.prefix=->] Prefix for the bot's commands.
+  * @param {Array} [options.masterUser=[]] An array containing the IDs of command-enabled users.
+  * @param {String} [options.fm=DiscordStreamer FM] Your "radio-station" name
+  * @param {String] [options.icon=https://cdn.cernodile.com/discordstreamer.png] Your embed image URL
   */
   constructor (token, options) {
     super();
@@ -39,6 +41,7 @@ module.exports = class DiscordStreamer extends EventEmitter {
     this.options.prefix = '->';
     this.options.masterUser = [];
     this.options.fm = 'DiscordStreamer FM';
+    this.options.icon = 'https://cdn.cernodile.com/discordstreamer.png';
     if (options) {
       for (var key in options) {
         this.options[key] = options[key];
@@ -56,21 +59,20 @@ module.exports = class DiscordStreamer extends EventEmitter {
       this.emit('ready');
     });
     this.bot.on('messageCreate', (msg) => {
-      if (msg.channel.id === this.options.feed) {
+      if (msg.channel.id === this.options.feed && !msg.author.bot) {
         var base = msg.content.substr(this.options.prefix.length).split(' ');
         if (this.options.masterUser.indexOf(msg.author.id) > -1) {
           if (msg.content.startsWith(this.options.prefix)) {
             switch (base[0]) {
-              case 'skip':
-                this.bot.createMessage(msg.channel.id, 'Skipped current song!');
-                this.session.stopPlaying();
-                break;
               case 'reshuffle':
+              case 'shuffle':
                 shuffle(this.list);
                 this.index = -1;
                 this.bot.createMessage(msg.channel.id, 'Reshuffled the playlist and restarting from zero index!');
                 this.session.stopPlaying();
                 break;
+              case 'request':
+              case 'enqueue':
               case 'add':
                   ytdl.getInfo(msg.content.substr(this.options.prefix.length + base[0].length + 1), (err, vid) => {
                     if (err) {
@@ -81,9 +83,17 @@ module.exports = class DiscordStreamer extends EventEmitter {
                     if (min < 10) min = '0' + Math.floor(vid.length_seconds / 60);
                     if (sec < 10) sec = '0' + Math.floor(vid.length_seconds % 60);
                     var title = vid.title;
-                    var urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + 'https://youtube.com/watch?v='.length);
+                    var protocol = 'https://';
+                    if (msg.content.startsWith('http://')) {
+                      protocol = 'http://';
+                    }
+                    var urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + protocol.length + 'youtube.com/watch?v='.length);
                     if (msg.content.includes('www.youtube.com')) {
-                      urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + 'https://www.youtube.com/watch?v='.length);
+                      urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + protocol.length + 'www.youtube.com/watch?v='.length);
+                    } else if (msg.content.includes('www.youtu.be')) {
+                      urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + protocol.length + 'www.youtu.be'.length);
+                    } else if (msg.content.includes('youtu.be')) {
+                      urlID = msg.content.substr(this.options.prefix.length + base[0].length + 1 + protocol.length + 'youtu.be'.length);
                     }
                     var final = {"urlID": urlID, "name": title, "length": min + ':' + sec, "requester": msg.author.id};
                     // Requester is logged for moderation purposes.
@@ -101,21 +111,54 @@ module.exports = class DiscordStreamer extends EventEmitter {
         }
         if (msg.content.startsWith(this.options.prefix)) {
           switch (base[0]) {
+            case 'playlist':
+            case 'list':
             case 'queue':
               var a = [];
               var i = Math.floor(this.index);
               var d = 0;
-              a.push(':loudspeaker: Playlist for **' + this.options.fm + '**\n\n')
+              function emojiNumber (string) { // eslint-ignore-line
+                return string.replace('10', ':keycap_ten:').replace('1', ':one:').replace('2', ':two:').replace('3', ':three:').replace('4', ':four:').replace('5', ':five:').replace('6', ':six:').replace('7', ':seven:').replace('8', ':eight:').replace('9', ':nine:');
+              }
               for (i; i < this.index + 10; i++) {
                 d++;
                 if (this.list[i]) {
-                  a.push('`[' + this.list[i].length + ']` **#' + d + '** `' + this.list[i].name + '`\n');
-                } else {
-                  a.push('*Queue starts over. New mix.*\n');
+                  a.push({"name": '\u200B', "inline": true, "value": emojiNumber(String(d)) + ' ' + this.list[i].name});
                 }
               }
-              this.bot.createMessage(msg.channel.id, a.join(''));
+              this.bot.createMessage(msg.channel.id, {'content': '', 'embed': {'title': 'Playlist', 'color': 0x62f762, thumbnail: {'url': this.options.icon}, fields: a}});
               break;
+            case 'skip':
+            case 'next':
+            case 'voteskip':
+              if (this.options.masterUser.indexOf(msg.author.id) > -1 && base[1] !== 'vote') {
+                this.bot.createMessage(msg.channel.id, {'content': '', 'embed': {'title': 'Voteskip', 'color': 0x62f762, thumbnail: {'url': this.options.icon}, fields: [{'inline': true, 'name': '\u200B', 'value': 'Since you are a master user, I\'ve skipped this song without voteskip for you.'}]}});
+                this.session.stopPlaying();
+              } else {
+                if (!this.voteSkip) {
+                  this.bot.createMessage(msg.channel.id, {'content': '', 'embed': {'title': 'Voteskip', 'color': 0x62c5f7, thumbnail: {'url': this.options.icon}, fields: [{'inline': true, 'name': '\u200B', 'value': 'React using :thumbsup: or :thumbsdown: to voice your opinion!'}]}}).then((m) => {
+                    this.voteSkip = true;
+                    m.addReaction(encodeURIComponent('\u{1F44D}'));
+                    m.addReaction(encodeURIComponent('\u{1F44E}'));
+                    setTimeout(() => {
+                      this.bot.getMessage(msg.channel.id, m.id).then((r) => {
+                        if (r.reactions['\u{1F44D}'].count > r.reactions['\u{1F44E}'].count) {
+                          r.edit({'content': '', 'embed': {'title': 'Voteskip', 'color': 0x62f762, thumbnail: {'url': this.options.icon}, fields: [{'inline': true, 'name': '\u200B', 'value': 'Vote is over! Skipping song!'}]}});
+                          this.session.stopPlaying();
+                        } else {
+                          r.edit({'content': '', 'embed': {'title': 'Voteskip', 'color': 0xf76262, thumbnail: {'url': this.options.icon}, fields: [{'inline': true, 'name': '\u200B', 'value': 'Vote has FAILED! Not skipping!'}]}});
+                        }
+                        this.voteSkip = false;
+                      });
+                    }, 10000);
+                  });
+                } else {
+                  this.bot.createMessage(msg.channel.id, 'Please wait until I have decided from my last voteskip!');
+                }
+              }
+              break;
+            case 'framework':
+            case 'source':
             case 'info':
               var formatArray = [];
               formatArray.push(':radio: **' + this.options.fm + '** v' + pkg.version);
@@ -127,17 +170,17 @@ module.exports = class DiscordStreamer extends EventEmitter {
       }
     });
   } 
-  /*
+  /**
   * @function connect
-  * @return null
+  * @returns {Promise}
   */
   connect () {
     return this.bot.connect();
   }
-  /*
+  /**
   * @function startPlaying
-  * @param filepath String Path to the JSON file, with following <a href="./playlistFormat.html">structure</a>.
-  * @return null
+  * @param {String} filepath Path to the JSON file, with following <a href="./playlistFormat.html">structure</a>.
+  * @returns {VoiceChannelStream}
   */
   startPlaying (filepath) {
     if (this.bot.ready) {
@@ -166,6 +209,7 @@ module.exports = class DiscordStreamer extends EventEmitter {
                 debugMsg('Now streaming: ' + playlist.name);
               }
               constructor.emit('newSong', playlist);
+              constructor.bot.editStatus({name: playlist.name, type: 1, url: 'https://twitch.tv//'})
               var formatArray = [];
               formatArray.push(':musical_note: **' + playlist.name + '** :musical_note:');
               formatArray.push('00:00 :arrow_forward:▬▬' + '▬'.repeat(Math.floor(playlist.name.length / 3)) + ' ' + playlist.length);
