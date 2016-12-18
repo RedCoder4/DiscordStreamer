@@ -8,7 +8,7 @@ var DiscordStreamer = require("discordstreamer");
 var stream = new DiscordStreamer("bot token", {"channel": "Voice channel ID", "feed", "Feed text channel ID", "masterUser": ["Your Discord user ID"]});
 stream.connect();
 stream.on("ready", () => {
-  stream.startPlaying(__dirname + "./playlist.json");
+  stream.startPlaying(__dirname);
 });
 ```
 
