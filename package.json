@@ -1,6 +1,6 @@
 {
   "name": "discordstreamer",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "description": "24/7 Music Streaming Discord Bot framework for a server-radio, made for ease of use.",
   "readme": "",
   "author": {
@@ -12,10 +12,11 @@
     "node": "^5.x.x",
     "npm": ">=3.x.x"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "repository": "https://github.com/TeamCernodile/DiscordStreamer/",
   "dependencies": {
     "eris": "abalabahaha/Eris#dev",
+    "rethinkdb": "^2.3.3",
     "ytdl-core": "^0.7.17"
   }
 }

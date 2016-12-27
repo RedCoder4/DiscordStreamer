@@ -1,51 +1,32 @@
 # DiscordStreamer
 DiscordStreamer is a 24/7 Music Streaming Discord Bot framework for a server-radio, made for ease of use.
 
-**WARNING!** *This module will drastically drain your bandwidth, be prepared to lose about 500GB-800GB per month, if you intend to do it for one bot, and 24/7.*
+**WARNING!** *This module will drastically drain your bandwidth depending on your playlist size. It will be a one-time thing only, unless you add more songs! Also be prepared to use a lot of disk space!*
 ## Usage 
 ```js
 var DiscordStreamer = require("discordstreamer");
-var stream = new DiscordStreamer("bot token", {"channel": "Voice channel ID", "feed", "Feed text channel ID", "masterUser": ["Your Discord user ID"]});
-stream.connect();
-stream.on("ready", () => {
-  stream.startPlaying(__dirname);
-});
+var stream = new DiscordStreamer("bot token", __dirname, {"vc": "Voice channel ID", "feed", "Feed text channel ID", "djs": ["Someone's Discord user ID"], "masterUsers": ["Your Discord user ID"]});
+stream.init();
 ```
 
 ## Playlists
-Playlists are done using a unique format, and they all must be structured as JSON. Here is an example of a perfect playlist envoirement
-
-```json
-{
-    "discordstreamer": {
-        "playlist": [
-            {
-                "urlID": "ecP-XLv1Rv0",
-                "name": "Bassjackers ft. Luciana - Fireflies (Official Music Video)",
-                "length": "03:11"
-            }
-        ]
-    }
-}
-```
+Playlists are stored using RethinkDB.
 
 ## Functionality
 DiscordStreamer offers variety of functions to host your server radio perfectly.
 
 User commands
   - queue - Lets the people see upcoming songs.
-    - list/playlist 
   - info - Shows information about the framework.
-    - source/framework 
-  - skip - Skips the currently playing song through a vote.
+
+DJ commands
+  - add - Adds a YouTube video to the playlist file.
+  - skip - Skips the currently playing song forcibly.
+  - reshuffle - Reshuffles the playlist, and starts skips to the first song.
 
 Masteruser commands
-  - add - Adds a YouTube video to the playlist file.
-    - request/enqueue
-  - skip - Skips the currently playing song forcibly.
-    - next/enqueue
-  - reshuffle - Reshuffles the playlist, and starts skips to the first song.
-    - shuffle
+  - eval - Evaluates code.
+  - restore - Converts post 1.0.0 playlist to RethinkDB.
 
 ## Support
 We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer) However, if you're lost and need more information, contact us at
