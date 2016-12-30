@@ -5,7 +5,7 @@ DiscordStreamer is a 24/7 Music Streaming Discord Bot framework for a server-rad
 ## Usage 
 ```js
 var DiscordStreamer = require("discordstreamer");
-var stream = new DiscordStreamer("bot token", __dirname, {"vc": "Voice channel ID", "feed", "Feed text channel ID", "djs": ["Someone's Discord user ID"], "masterUsers": ["Your Discord user ID"]});
+var stream = new DiscordStreamer("bot token", __dirname, {"vc": "Voice channel ID", "feed": "Feed text channel ID", "djs": ["Someone's Discord user ID"], "masterUsers": ["Your Discord user ID"]});
 stream.init();
 ```
 
