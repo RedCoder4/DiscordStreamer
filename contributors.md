@@ -1,4 +1,4 @@
-# Main Contributor
+# Main Developer
 Joann Mõndresku (Cernodile#0168, https://cernodile.com)
 
 ## Team Cernodile
