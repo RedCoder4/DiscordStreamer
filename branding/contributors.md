@@ -8,3 +8,6 @@ DoctorDarkMagic (DoctorDarkMagic ツ#3790)
 
 ### Bug Hunters
 GameplaysRFun (Gameplays R Fun#5015)
+
+###Shitposters
+luke (luke#7172, https://keybase.io/safe)
