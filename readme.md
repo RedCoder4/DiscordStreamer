@@ -27,6 +27,7 @@ DJ commands
 Masteruser commands
   - eval - Evaluates code.
   - restore - Converts post 1.0.0 playlist to RethinkDB.
+  - shutdown - Shuts down the bot's current process.
 
 ## Support
 We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer) However, if you're lost and need more information, contact us at
