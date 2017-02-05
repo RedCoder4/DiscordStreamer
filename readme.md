@@ -10,8 +10,7 @@ stream.init();
 ```
 
 ## Playlists
-Playlists are stored using RethinkDB.
-
+Playlists are stored using [RethinkDB](www.rethinkdb.com).
 ## Functionality
 DiscordStreamer offers variety of functions to host your server radio perfectly.
 
