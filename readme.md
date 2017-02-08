@@ -39,3 +39,6 @@ Masteruser commands
 We have documentation right [here!](https://cernodile.com/docs/DiscordStreamer) However, if you're lost and need more information, contact us at
 
 [![Discord](https://discordapp.com/api/guilds/256444503123034112/widget.png?style=banner2)](https://discord.gg/NQcgJzR)
+
+## Installation
+Installation guides are provided in [the wiki](https://github.com/teamcernodile/discordstreamer/wiki). For an OS that does not have an installation guide yet, contact us on the DiscordStreamer community using the button above.
